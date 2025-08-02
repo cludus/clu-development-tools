@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+function copy_id {
+    user=$1
+    server=$2
+    ping -c 1 $server
+    if [ $? -ne 0 ]; then
+        echo "$server is not accessible"
+        return 1
+    fi
+
+    sshpass -p vagrant ssh-copy-id -o StrictHostKeyChecking=no $user@$server
+    if [ $? -eq  0 ]; then
+      echo "ssh id for $user@$server copied successfully"
+      return 0
+    else
+      echo "$user@$server ssh id could not be copied"
+      return 1
+    fi
+}
+
+for i in {1..8}; do
+  echo "192.168.64.$((100 + $i))"
+  copy_id vagrant 192.168.64.$((100 + $i)) || true
+done

@@ -1,0 +1,2 @@
+{% for node in nodes %}
+192.168.64.{{ 101 + loop.index0 }} node{{ loop.index0 }}.{{ name }}.private{% endfor %}

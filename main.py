@@ -1,0 +1,73 @@
+import os
+from jinja2 import Environment, FileSystemLoader
+import shutil
+import pathlib
+
+script_directory = pathlib.Path(__file__).parent.resolve()
+print(script_directory)
+
+def copy_files(source_directory, destination_directory):
+    source_directory = os.path.join(script_directory, source_directory)
+    if os.path.exists(destination_directory):
+        print(
+            f"Destination directory '{destination_directory}' already exists. Please remove it or choose a different destination.")
+    else:
+        try:
+            shutil.copytree(source_directory, destination_directory)
+            print(f"Directory '{source_directory}' and its contents copied to '{destination_directory}' successfully.")
+        except shutil.Error as e:
+            print(f"Error copying directory: {e}")
+        except OSError as e:
+            print(f"OS Error: {e}")
+
+def remove_cluster_dir():
+    directory_name = ".cluster"
+    if os.path.exists(directory_name):
+        try:
+            shutil.rmtree(directory_name)
+            print(f"Directory '{directory_name}' removed successfully.")
+        except shutil.Error as e:
+            print(f"Error deleting directory: {e}")
+        except OSError as e:
+            print(f"Error removing directory '{directory_name}': {e}")
+
+def create_cluster_dir():
+    directory_name = ".cluster"
+    try:
+        os.mkdir(directory_name)
+        print(f"directory '{directory_name}' created successfully.")
+    except FileExistsError:
+        print(f"directory '{directory_name}' already exists.")
+
+def render_template(tpl, data, output):
+    template_dir = 'templates'
+    template_dir = os.path.join(script_directory, 'templates')
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template(tpl)
+    rendered_output = template.render(data)
+    with open(output, 'w') as f:
+        f.write(rendered_output)
+
+def create_vagrant_file(name):
+    data = {'name': name, 'nodes': [{}, {}]}
+    render_template('Vagrantfile.j2', data, '.cluster/Vagrantfile')
+
+def create_ansible_inventory(name):
+    data = {'name': name, 'nodes': [{}, {}]}
+    render_template('inventory.yml.j2', data, '.cluster/inventory.yml')
+
+def create_hosts(name):
+    data = {'name': name, 'nodes': [{}, {}]}
+    render_template('hosts.txt.j2', data, '.cluster/hosts.txt')
+
+def create_setup(name):
+    print(f'creating setup for  {name}')  # Press Ctrl+8 to toggle the breakpoint.
+    remove_cluster_dir()
+    copy_files('files', '.cluster')
+    create_vagrant_file(name)
+    create_ansible_inventory(name)
+    create_hosts(name)
+
+if __name__ == '__main__':
+    create_setup('kube1')
+

@@ -1,0 +1,7 @@
+- name: setup clusters
+  gather_facts: true
+  hosts: clusters
+  become: true
+  roles:
+    - role: cludus.commons.dns
+    - role: cludus.commons.k3s

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+rm -rf .galaxy || true
+ansible-galaxy collection install -r requirements.yml -p .galaxy/
