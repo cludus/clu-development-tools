@@ -5,6 +5,7 @@ import pathlib
 import yaml
 import random
 import string
+import subprocess
 
 script_directory = pathlib.Path(__file__).parent.resolve()
 print(script_directory)
@@ -71,16 +72,21 @@ def create_gen_root(data):
 def create_ssh_copy_ids(data):
     render_template('ssh-copy-ids.j2', data, '.cluster/.bin/ssh-copy-ids')
 
+def give_exec_access():
+    result = subprocess.run(["chmod", "-x", ".cluster/.bin/*"], capture_output=True, text=True, check=True)
+    print("Stdout:", result.stdout)
+    print("Stderr:", result.stderr)
 
 def create_setup(data):
     print(f'creating setup for  {data['name']}')  # Press Ctrl+8 to toggle the breakpoint.
-    remove_cluster_dir()
+    # remove_cluster_dir()
     copy_files('files', '.cluster')
     create_vagrant_file(data)
     create_ansible_inventory(data)
     create_hosts(data)
     create_gen_root(data)
     create_ssh_copy_ids(data)
+    give_exec_access()
 
 def read_config(filename):
     try:
