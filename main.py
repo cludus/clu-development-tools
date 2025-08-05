@@ -2,6 +2,7 @@ import os
 from jinja2 import Environment, FileSystemLoader
 import shutil
 import pathlib
+import yaml
 
 script_directory = pathlib.Path(__file__).parent.resolve()
 print(script_directory)
@@ -41,33 +42,40 @@ def create_cluster_dir():
 
 def render_template(tpl, data, output):
     template_dir = 'templates'
-    template_dir = os.path.join(script_directory, 'templates')
+    template_dir = os.path.join(script_directory, template_dir)
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template(tpl)
     rendered_output = template.render(data)
     with open(output, 'w') as f:
         f.write(rendered_output)
 
-def create_vagrant_file(name):
-    data = {'name': name, 'nodes': [{}, {}]}
+def create_vagrant_file(data):
     render_template('Vagrantfile.j2', data, '.cluster/Vagrantfile')
 
-def create_ansible_inventory(name):
-    data = {'name': name, 'nodes': [{}, {}]}
+def create_ansible_inventory(data):
     render_template('inventory.yml.j2', data, '.cluster/inventory.yml')
 
-def create_hosts(name):
-    data = {'name': name, 'nodes': [{}, {}]}
+def create_hosts(data):
     render_template('hosts.txt.j2', data, '.cluster/hosts.txt')
 
-def create_setup(name):
-    print(f'creating setup for  {name}')  # Press Ctrl+8 to toggle the breakpoint.
+def create_setup(data):
+    print(f'creating setup for  {data['name']}')  # Press Ctrl+8 to toggle the breakpoint.
     remove_cluster_dir()
     copy_files('files', '.cluster')
-    create_vagrant_file(name)
-    create_ansible_inventory(name)
-    create_hosts(name)
+    create_vagrant_file(data)
+    create_ansible_inventory(data)
+    create_hosts(data)
+
+def read_config(filename):
+    try:
+        with open(filename, 'r') as file:
+            data = yaml.safe_load(file)
+        return data
+    except FileNotFoundError:
+        print("Error: config.yaml not found.")
+    except yaml.YAMLError as exc:
+        print(f"Error parsing YAML file: {exc}")
 
 if __name__ == '__main__':
-    create_setup('kube1')
-
+    data = read_config('cluster.yml')
+    create_setup(data)

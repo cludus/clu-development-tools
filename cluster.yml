@@ -1,0 +1,4 @@
+name: mykube-clust
+nodes:
+  - id: 1
+  - id: 2
