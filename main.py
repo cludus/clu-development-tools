@@ -77,10 +77,10 @@ def create_gen_root(data):
 def create_ssh_copy_ids(data):
     render_template('ssh-copy-ids.j2', data, '.cluster/.bin/ssh-copy-ids')
 
-def give_exec_access():
-    result = subprocess.run(["chmod", "-x", ".cluster/.bin/*"], capture_output=True, text=True, check=True)
-    print("Stdout:", result.stdout)
-    print("Stderr:", result.stderr)
+# def give_exec_access():
+#     result = subprocess.run(["chmod", "+x", ".cluster/.bin/*"], capture_output=True, text=True, check=True)
+#     print("Stdout:", result.stdout)
+#     print("Stderr:", result.stderr)
 
 def create_setup(data):
     print(f'creating setup for  {data['name']}')  # Press Ctrl+8 to toggle the breakpoint.
@@ -91,7 +91,7 @@ def create_setup(data):
     create_hosts(data)
     create_gen_root(data)
     create_ssh_copy_ids(data)
-    give_exec_access()
+    #give_exec_access()
 
 def read_config(filename):
     try:
@@ -107,8 +107,9 @@ if __name__ == '__main__':
     data = read_config('cluster.yml')
     data['cluster_token'] = generate_random_string(64)
     master_index=-1
-    print(data['nodes'])
     for index, node in enumerate(data['nodes']):
         if node['type'] == 'master':
             master_index = index
+    for index, node in enumerate(data['nodes']):
+        node['master_index'] = master_index
     create_setup(data)

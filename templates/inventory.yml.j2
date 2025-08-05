@@ -15,5 +15,5 @@ cluster:
         hostname: node{{ loop.index0 }}.{{ domain_name }}
         config_dir: config
         cluster_token: {{ cluster_token }}
-        master_server: {{ subnet_prefix }}.{{ 101 + master_index }}
+        master_server: {{ subnet_prefix }}.{{ 101 + node.master_index }}
     {% endfor %}
