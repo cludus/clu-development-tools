@@ -1,6 +1,6 @@
-- name: setup clusters
+- name: setup cluster
   gather_facts: true
-  hosts: clusters
+  hosts: cluster
   become: true
   roles:
     - role: cludus.commons.dns

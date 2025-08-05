@@ -17,21 +17,25 @@ def generate_random_string(length):
 
 def copy_files(source_directory, destination_directory):
     source_directory = os.path.join(script_directory, source_directory)
-    if os.path.exists(destination_directory):
-        print(
-            f"Destination directory '{destination_directory}' already exists. Please remove it or choose a different destination.")
-    else:
-        try:
-            shutil.copytree(source_directory, destination_directory)
-            print(f"Directory '{source_directory}' and its contents copied to '{destination_directory}' successfully.")
-        except shutil.Error as e:
-            print(f"Error copying directory: {e}")
-        except OSError as e:
-            print(f"OS Error: {e}")
+    try:
+        if os.path.exists(destination_directory) and os.path.exists(destination_directory + '/.bin'):
+            try:
+                shutil.rmtree(destination_directory)
+                print(f"Directory '{destination_directory}' removed successfully.")
+            except shutil.Error as e:
+                print(f"Error deleting directory: {e}")
+            except OSError as e:
+                print(f"Error removing directory '{destination_directory}': {e}")
+        shutil.copytree(source_directory, destination_directory)
+        print(f"Directory '{source_directory}' and its contents copied to '{destination_directory}' successfully.")
+    except shutil.Error as e:
+        print(f"Error copying directory: {e}")
+    except OSError as e:
+        print(f"OS Error: {e}")
 
 def remove_cluster_dir():
     directory_name = ".cluster"
-    if os.path.exists(directory_name):
+    if os.path.exists(directory_name) and not os.path.exists(directory_name + '/.vagrant'):
         try:
             shutil.rmtree(directory_name)
             print(f"Directory '{directory_name}' removed successfully.")
@@ -43,8 +47,9 @@ def remove_cluster_dir():
 def create_cluster_dir():
     directory_name = ".cluster"
     try:
-        os.mkdir(directory_name)
-        print(f"directory '{directory_name}' created successfully.")
+        if not os.path.exists(directory_name):
+            os.mkdir(directory_name)
+            print(f"directory '{directory_name}' created successfully.")
     except FileExistsError:
         print(f"directory '{directory_name}' already exists.")
 
@@ -101,4 +106,9 @@ def read_config(filename):
 if __name__ == '__main__':
     data = read_config('cluster.yml')
     data['cluster_token'] = generate_random_string(64)
+    master_index=-1
+    print(data['nodes'])
+    for index, node in enumerate(data['nodes']):
+        if node['type'] == 'master':
+            master_index = index
     create_setup(data)
