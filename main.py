@@ -3,9 +3,16 @@ from jinja2 import Environment, FileSystemLoader
 import shutil
 import pathlib
 import yaml
+import random
+import string
 
 script_directory = pathlib.Path(__file__).parent.resolve()
 print(script_directory)
+
+def generate_random_string(length):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for i in range(length))
+    return random_string
 
 def copy_files(source_directory, destination_directory):
     source_directory = os.path.join(script_directory, source_directory)
@@ -58,6 +65,13 @@ def create_ansible_inventory(data):
 def create_hosts(data):
     render_template('hosts.txt.j2', data, '.cluster/hosts.txt')
 
+def create_gen_root(data):
+    render_template('gen-root-ca.j2', data, '.cluster/.bin/gen-root-ca')
+
+def create_ssh_copy_ids(data):
+    render_template('ssh-copy-ids.j2', data, '.cluster/.bin/ssh-copy-ids')
+
+
 def create_setup(data):
     print(f'creating setup for  {data['name']}')  # Press Ctrl+8 to toggle the breakpoint.
     remove_cluster_dir()
@@ -65,6 +79,8 @@ def create_setup(data):
     create_vagrant_file(data)
     create_ansible_inventory(data)
     create_hosts(data)
+    create_gen_root(data)
+    create_ssh_copy_ids(data)
 
 def read_config(filename):
     try:
@@ -78,4 +94,5 @@ def read_config(filename):
 
 if __name__ == '__main__':
     data = read_config('cluster.yml')
+    data['cluster_token'] = generate_random_string(64)
     create_setup(data)

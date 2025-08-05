@@ -1,4 +1,20 @@
 name: mykube-clust
+subnet_prefix: 10.64.0
+domain_name: mykube.private
+cpus: 2
+node_memory: 4
+node_disk: 20
+certificate:
+  country: US
+  state: Florida
+  city: Cape Coral
+  organization: CLudus
+  organization_unit: MyKube Cluster
 nodes:
-  - id: 1
-  - id: 2
+  - type: master
+  - type: server
+  - type: server
+  - type: agent
+  - type: agent
+  - type: agent
+  - type: agent

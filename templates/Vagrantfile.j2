@@ -1,11 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-alpineImage = "generic-x64/alpine319"
-
 vms = [
-    {% for node in nodes %}{:title => "{{ name }}{{ loop.index0 }}", :ip => "192.168.64.{{ 101 + loop.index0 }}", :box => alpineImage, :memory => 2, :nets => [
-    ]},
+    {% for node in nodes %}{:title => "{{ name }}{{ loop.index0 }}", :ip => "{{ subnet_prefix }}.{{ 101 + loop.index0 }}"},
     {% endfor %}
 ]
 
@@ -13,20 +10,14 @@ Vagrant.configure("2") do |config|
   vms.each do |vmData|
     config.vm.define vmData[:title] do |cfg|
       cfg.vm.hostname = "#{vmData[:title]}"
-      cfg.vm.box = vmData[:box]
+      cfg.vm.box = "generic-x64/alpine319"
       cfg.vm.network :private_network, :ip => vmData[:ip]
-      vmData[:nets].each do |net|
-        cfg.vm.network :private_network,
-                       :ip => "#{net[:ip]}",
-                       :libvirt__network_name => "#{net[:name]}",
-                       :libvirt__netmask => "#{net[:mask]}"
-      end
 
       cfg.vm.provider "libvirt" do |vb|
         vb.driver   = "kvm"
-        vb.cpus     = 2
-        vb.memory   = "#{1024 * vmData[:memory]}"
-        vb.storage :file, :size => "#{2 * vmData[:memory]}G"
+        vb.cpus     = {{ cpus }}
+        vb.memory   = {{ node_memory }} * 1024
+        vb.storage :file, :size => "{{ node_disk }}G"
       end
 
       cfg.vm.provision "shell", inline: <<-SCRIPT

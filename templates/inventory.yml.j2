@@ -2,17 +2,17 @@ cluster:
   hosts:
     {% for node in nodes %}
     node{{ loop.index0 }}:
-      ansible_host: 192.168.64.{{ 101 + loop.index0 }}
+      ansible_host: {{ subnet_prefix }}.{{ 101 + loop.index0 }}
       ansible_user: vagrant
-      hostname: node{{ loop.index0 }}.{{ name }}.private
+      hostname: node{{ loop.index0 }}.{{ domain_name }}
       k3s:
-        ip: 192.168.64.{{ 101 + loop.index0 }}
+        ip: {{ subnet_prefix }}.{{ 101 + loop.index0 }}
         root_ca_path: certs/root-ca.pem
         root_ca_key_path: certs/root-ca.key
         cluster_name: {{ name }}
         uninstall: false
         node_type: {{ node.type }}
-        hostname: node{{ loop.index0 }}.{{ name }}.private
+        hostname: node{{ loop.index0 }}.{{ domain_name }}
         config_dir: config
-        cluster_token: {{ token }}
+        cluster_token: {{ cluster_token }}
     {% endfor %}

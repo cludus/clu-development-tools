@@ -22,6 +22,7 @@ function copy_id {
 }
 
 for i in {1..8}; do
-  echo "192.168.64.$((100 + $i))"
-  copy_id vagrant 192.168.64.$((100 + $i)) || true
+  ssh-keygen -R "{{ subnet_prefix }}.$((100 + $i))"
+  echo "{{ subnet_prefix }}.$((100 + $i))"
+  copy_id vagrant {{ subnet_prefix }}.$((100 + $i)) || true
 done

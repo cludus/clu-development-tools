@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+rm -rf certs
+mkdir -p certs
+openssl genrsa -out certs/root-ca.key 4096
+openssl req -x509 -new -nodes -key certs/root-ca.key -sha256 -days 1024 -subj "/C={{ certificate.country }}/ST={{ certificate.state }}/L={{ certificate.city }}/O={{ certificate.organization }}/OU={{ certificate.organization_unit }}/CN={{ domain_name }}" -out certs/root-ca.pem

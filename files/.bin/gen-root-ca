@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-rm -rf certs
-mkdir -p certs
-openssl genrsa -out certs/root-ca.key 4096
-openssl req -x509 -new -nodes -key certs/root-ca.key -sha256 -days 1024 -subj "/C=US/ST=Florida/L=Cape Coral/O=Cludus/OU=Cludus Network/CN=cludus.test" -out .certs/root-ca.pem
-# ansible-vault encrypt .certs/root-ca.key .certs/root-ca.pem
