@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "cludt"
 version = "0.0.1"
 dependencies = [
+    "requires",
     "Jinja2 == 3.1.2",
     "pathlib ==1.0.1",
     "click>=8.0",
@@ -13,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-    cludt = "cli:cli" # 'my-cli' is the command name, 'my_click_app.cli:cli' is the path to your main Click function.
+cludt = "cludt:cli"
 
 [tool.setuptools.package-data]
-all = ['src/*']
+"data" = ["*.j2", "*.yml"]

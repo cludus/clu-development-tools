@@ -2,4 +2,5 @@
 .cluster
 .idea
 dist
-src/cludt.egg-info
+**/cludt.egg-info
+cludt.egg-info
