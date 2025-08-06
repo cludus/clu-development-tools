@@ -16,4 +16,5 @@ cluster:
         config_dir: config
         cluster_token: {{ cluster_token }}
         master_server: {{ subnet_prefix }}.{{ 101 + node.master_index }}
+        disk_type: unknown
     {% endfor %}

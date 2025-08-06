@@ -21,7 +21,7 @@ function copy_id {
     fi
 }
 
-for i in {1..{{ nodes.length }}; do
+for i in {1..{{ nodes|length }}}; do
   ssh-keygen -R "{{ subnet_prefix }}.$((100 + $i))"
   echo "{{ subnet_prefix }}.$((100 + $i))"
   copy_id vagrant {{ subnet_prefix }}.$((100 + $i)) || true
