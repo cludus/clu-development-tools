@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cludt"
+version = "0.0.1"
+dependencies = [
+    "Jinja2 == 3.1.2",
+    "pathlib ==1.0.1",
+    "click>=8.0",
+    'importlib-metadata; python_version<"3.14"',
+]
+
+[project.scripts]
+    my-cli = "src.cli:cli" # 'my-cli' is the command name, 'my_click_app.cli:cli' is the path to your main Click function.
