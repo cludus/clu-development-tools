@@ -1,3 +1,5 @@
 .venv
 .cluster
 .idea
+dist
+src/cludt.egg-info

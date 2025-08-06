@@ -7,15 +7,13 @@ import random
 import string
 import subprocess
 
-script_directory = pathlib.Path(__file__).parent.resolve()
-print(script_directory)
-
 def generate_random_string(length):
     characters = string.ascii_letters + string.digits
     random_string = ''.join(random.choice(characters) for i in range(length))
     return random_string
 
 def copy_files(source_directory, destination_directory):
+    script_directory = pathlib.Path(__file__).parent.resolve()
     source_directory = os.path.join(script_directory, source_directory)
     try:
         if os.path.exists(destination_directory) and os.path.exists(destination_directory + '/.bin'):
@@ -54,6 +52,7 @@ def create_cluster_dir():
         print(f"directory '{directory_name}' already exists.")
 
 def render_template(tpl, data, output):
+    script_directory = pathlib.Path(__file__).parent.resolve()
     template_dir = 'templates'
     template_dir = os.path.join(script_directory, template_dir)
     env = Environment(loader=FileSystemLoader(template_dir))
@@ -107,7 +106,7 @@ def read_config(filename):
     except yaml.YAMLError as exc:
         print(f"Error parsing YAML file: {exc}")
 
-if __name__ == '__main__':
+def create_cluster():
     data = read_config('cluster.yml')
     data['cluster_token'] = generate_random_string(64)
     master_index=-1

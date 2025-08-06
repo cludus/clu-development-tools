@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "build"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -13,4 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-    my-cli = "src.cli:cli" # 'my-cli' is the command name, 'my_click_app.cli:cli' is the path to your main Click function.
+    cludt = "cli:cli" # 'my-cli' is the command name, 'my_click_app.cli:cli' is the path to your main Click function.
+
+[tool.setuptools.package-data]
+all = ['src/*']
