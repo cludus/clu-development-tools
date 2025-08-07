@@ -19,28 +19,28 @@ def copy_files(source_directory, destination_directory):
         if os.path.exists(destination_directory) and os.path.exists(destination_directory + '/.bin'):
             try:
                 shutil.rmtree(destination_directory + '/.bin')
-                print(f"Directory '{destination_directory}/.bin' removed successfully.")
+                print(f"directory '{destination_directory}/.bin' removed successfully.")
             except shutil.Error as e:
-                print(f"Error deleting directory: {e}")
+                print(f"error deleting directory: {e}")
             except OSError as e:
-                print(f"Error removing directory '{destination_directory}': {e}")
+                print(f"error removing directory '{destination_directory}': {e}")
         shutil.copytree(source_directory, destination_directory, dirs_exist_ok=True)
         print(f"Directory '{source_directory}' and its contents copied to '{destination_directory}' successfully.")
     except shutil.Error as e:
-        print(f"Error copying directory: {e}")
+        print(f"error copying directory: {e}")
     except OSError as e:
-        print(f"OS Error: {e}")
+        print(f"os error: {e}")
 
 def remove_cluster_dir():
     directory_name = ".cluster"
     if os.path.exists(directory_name) and not os.path.exists(directory_name + '/.vagrant'):
         try:
             shutil.rmtree(directory_name)
-            print(f"Directory '{directory_name}' removed successfully.")
+            print(f"directory '{directory_name}' removed successfully.")
         except shutil.Error as e:
-            print(f"Error deleting directory: {e}")
+            print(f"error deleting directory: {e}")
         except OSError as e:
-            print(f"Error removing directory '{directory_name}': {e}")
+            print(f"error removing directory '{directory_name}': {e}")
 
 def create_cluster_dir():
     directory_name = ".cluster"
@@ -102,13 +102,13 @@ def read_config(filename):
             data = yaml.safe_load(file)
         return data
     except FileNotFoundError:
-        print("Error: config.yaml not found.")
+        print("error: config.yaml not found.")
     except yaml.YAMLError as exc:
-        print(f"Error parsing YAML file: {exc}")
+        print(f"error parsing YAML file: {exc}")
 
 def create_cluster():
     if not os.path.exists('cluster.yml'):
-        print(f"Error cluster.yml not found in current dir")
+        print(f"error cluster.yml not found in current dir")
         return
 
     data = read_config('cluster.yml')
