@@ -107,6 +107,10 @@ def read_config(filename):
         print(f"Error parsing YAML file: {exc}")
 
 def create_cluster():
+    if not os.path.exists('cluster.yml'):
+        print(f"Error cluster.yml not found in current dir")
+        return
+
     data = read_config('cluster.yml')
     data['cluster_token'] = generate_random_string(64)
     master_index=-1

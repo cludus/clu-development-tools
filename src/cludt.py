@@ -1,5 +1,7 @@
 import click
 
+from k8s.main import create_cluster
+
 @click.group()
 def cli():
     """A simple CLI application."""
@@ -7,5 +9,4 @@ def cli():
 
 @cli.command()
 def k8s():
-    """Says hello."""
-    click.echo("Hello, World!")
+    create_cluster()
