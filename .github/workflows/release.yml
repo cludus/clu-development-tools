@@ -31,7 +31,7 @@ jobs:
       - name: install pip
         run: |
           pip install toml-cli
-          pip install -r requirements.txt
+          pip install -e
 
       - name: Extract current version
         id: extract-current-version
