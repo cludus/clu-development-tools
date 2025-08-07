@@ -1,5 +1,6 @@
 # Install
 
+    curl https://api.github.com/repos/cludus/clu-development-tools/releases/latest
     pip install <cludt package>
 
 # Usage
