@@ -63,7 +63,7 @@ jobs:
 
       - name: Bump up version
         run: |
-          toml set --toml-path pyproject.toml project.version "${{ steps.extract-current-version.outputs.new-version }}\" 
+          toml set --toml-path pyproject.toml project.version "${{ steps.extract-current-version.outputs.new-version }}" 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
