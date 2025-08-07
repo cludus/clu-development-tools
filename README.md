@@ -1,3 +1,7 @@
+# Install
+
+    pip install <cludt package>
+
 # Usage
 
 To create a new k8s cluster, here is an example of cluster.yml
@@ -24,3 +28,8 @@ nodes:
   - type: agent
   - type: agent
 ```
+
+Then run the following command to create a local cluster
+
+    cludt k8s init local
+

@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-cludt = "cludt:cli"
+cludt = "cludt:cludt"
 
 [tool.setuptools.package-data]
 "data" = ["*.j2", "*.yml"]

@@ -3,10 +3,17 @@ import click
 from k8s.main import create_cluster
 
 @click.group()
-def cli():
-    """A simple CLI application."""
+def cludt():
     pass
 
-@cli.command()
+@cludt.group()
 def k8s():
+    pass
+
+@k8s.group()
+def init():
+    pass
+
+@init.command()
+def local():
     create_cluster()
