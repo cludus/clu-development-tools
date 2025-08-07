@@ -28,10 +28,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: bash script
+      - name: install pip
         run: |
           pip install toml-cli
-          
+          pip install -r requirements.txt
 
       - name: Extract current version
         id: extract-current-version
@@ -60,6 +60,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.extract-current-version.outputs.current-version }}
+
+      - name: build
+        run: |
+          python -m build
+
+      - name: Upload built artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-artifacts
+          path: dist/
 
       - name: Bump up version
         run: |
