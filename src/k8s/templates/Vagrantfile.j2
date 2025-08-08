@@ -17,11 +17,26 @@ Vagrant.configure("2") do |config|
         vb.driver   = "kvm"
         vb.cpus     = {{ cpus }}
         vb.memory   = {{ node_memory }} * 1024
-        vb.storage :file, :size => "{{ node_disk }}G"
+        vb.storage :file, {
+          device: "vdb",
+          size: "{{ node_disk }}G",
+          type: "qcow2",
+          bus: "virtio",
+          # allow_existing: true
+        }
       end
 
       cfg.vm.provision "shell", inline: <<-SCRIPT
-apk add --no-cache python3 py3-pip || true
+        apk add --no-cache python3 py3-pip || true
+        sudo mkfs.ext4 /dev/vdb
+        sudo mkdir -p /var/lib/longhorn
+        sudo mount /dev/vdb /var/lib/longhorn
+        echo "/dev/vdb      /var/lib/longhorn    ext4    defaults 0 2" | sudo tee -a /etc/fstab
+        sudo mkdir -p /var/local.d
+        sudo touch /etc/local.d/shared-mount.start
+        echo "mount --make-rshared /var/lib/longhorn" | sudo tee -a /etc/local.d/shared-mount.start
+        sudo chmod +x /etc/local.d/shared-mount.start
+        sudo rc-update add local default
       SCRIPT
     end
   end
