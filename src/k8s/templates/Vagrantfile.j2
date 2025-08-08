@@ -37,6 +37,11 @@ Vagrant.configure("2") do |config|
         echo "mount --make-rshared /var/lib/longhorn" | sudo tee -a /etc/local.d/shared-mount.start
         sudo chmod +x /etc/local.d/shared-mount.start
         sudo rc-update add local default
+        sudo apk add open-iscsi
+        sudo modprobe iscsi_tcp
+        sudo apk add nfs-utils
+        sudo apk add cryptsetup
+        sudo apk add device-mapper
       SCRIPT
     end
   end
