@@ -1,7 +1,12 @@
 # Install
 
-    curl https://api.github.com/repos/cludus/clu-development-tools/releases/latest
-    pip install <cludt package>
+    wget -qO- 'https://api.github.com/repos/cludus/clu-development-tools/releases/latest' | jq -r '.tarball_url' | xargs wget -qO- > cludt.tar.gz
+    tar -xvzf cludt.tar.gz
+    cd cludus-clu-development-tools-...
+    pip install build
+    python -m build
+    cd dist
+    pip install cludt-<...>.whl
 
 # Usage
 
