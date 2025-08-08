@@ -35,6 +35,7 @@ Vagrant.configure("2") do |config|
         sudo mkdir -p /var/local.d
         sudo touch /etc/local.d/shared-mount.start
         echo "mount --make-rshared /var/lib/longhorn" | sudo tee -a /etc/local.d/shared-mount.start
+        echo "mount --make-rshared /" | sudo tee -a /etc/local.d/shared-mount.start
         sudo chmod +x /etc/local.d/shared-mount.start
         sudo rc-update add local default
         sudo apk add open-iscsi
